@@ -33,6 +33,9 @@ What that means in practice:
 - If/when that PR gets merged into a stable release, this project should
   become meaningfully more reliable. Until then, expect "experimental" to
   mean what it says.
+- **Most of this codebase was written with substantial AI assistance**
+  (Claude, by Anthropic) - see Credits below for what that actually
+  means in practice.
 
 ---
 
@@ -371,3 +374,14 @@ Python libraries) and their own, separate licensing terms.
 ## Credits
 
 SpotiBot was created by [Kripotker](https://github.com/Kripotker).
+
+**AI disclosure:** the large majority of the code in this repository was
+written by Claude (Anthropic), working iteratively with Kripotker across
+an extended back-and-forth. Direction, testing on real hardware, bug
+reports from real usage, and design/feature decisions all came from
+Kripotker, who also wrote some parts of the code directly and debugged
+some issues independently - most debugging beyond that happened jointly,
+working through real logs and errors together. Claude also drafted this
+documentation. If you're evaluating this project's code quality,
+architecture, or reliability, that development process is worth keeping
+in mind.
