@@ -25,10 +25,11 @@ What that means in practice:
   odd errors during the initial voice handshake, etc. Built-in
   self-healing covers most of these automatically; see Troubleshooting
   below for the rest.
-- **Windows Defender (and possibly other antivirus software) will very
-  likely flag the built `.exe`.** This isn't a sign anything's wrong -
-  see the dedicated section below for exactly why and what to do about
-  it.
+- **Releases only go up once cleared by Microsoft's malware analysis -
+  but individual antivirus setups can still occasionally disagree
+  afterward.** This isn't a sign anything's wrong - see the Download
+  section and the dedicated Windows Defender section below for why, and
+  for a from-source alternative if a release isn't up yet.
 - If/when that PR gets merged into a stable release, this project should
   become meaningfully more reliable. Until then, expect "experimental" to
   mean what it says.
@@ -56,8 +57,25 @@ this part - those only matter in Part 2.
 
 ## Download
 
-Grab the latest `SpotiBot-windows.zip` from this repo's
-[Releases page](../../releases), extract it *anywhere you have write
+**⚠️ The `.exe`/`.zip` won't be published here until it has passed
+Microsoft's malware analysis.** New, unsigned executables that download
+and run other programs at startup (this one does, by design - see the
+Windows Defender section below) start with zero reputation in
+Microsoft's cloud-based scanning system, and get flagged automatically
+until that clears - even when the file is genuinely safe. Rather than
+publish a release that immediately gets quarantined for everyone who
+downloads it, a release only goes up here once it's passed that check.
+If the Releases page is empty or the latest release looks incomplete,
+that's why.
+
+**If you want to use SpotiBot right now, before a cleared release is
+available, and don't mind a bit of Python setup:** skip down to "Part 2:
+Building from source / development" further in this README - running
+from source works the same regardless of where that review currently
+stands.
+
+Once a release is published, grab the latest `SpotiBot-windows.zip` from
+this repo's [Releases page](../../releases), extract it *anywhere you have write
 permission* (your Desktop or Documents folder are fine - avoid
 `Program Files`, since SpotiBot creates a few folders next to itself on
 first run and needs permission to do that), and run `SpotiBot.exe` inside
@@ -68,13 +86,16 @@ needs the other files sitting alongside it (an `_internal` folder full of
 supporting files) to actually run. Move or shortcut the whole extracted
 folder, not just the exe.
 
-## Windows Defender will probably flag it - here's why, and what to do
+## If Windows Defender flags it - here's why it might do that, and what to do
 
-You'll likely see Windows quarantine the exe the first time you run it,
-or block the download outright. This is expected, and here's the honest
-reason why, not just "ignore it": SpotiBot downloads and runs other
-programs at startup (the AI model backend, and possibly GPU support
-files) - which is also a pattern real malware uses. It's a false alarm
+Even though this file isn't made available before passing Microsoft's
+malware detection process, individual antivirus setups can still
+disagree with that after the fact - you may still see Windows quarantine
+the exe the first time you run it, or block the download outright. Here's
+the honest reason why this can still happen, not just "ignore it":
+SpotiBot downloads and runs other programs at startup (the AI model
+backend, and possibly GPU support files) - which is also a pattern real
+malware uses. It's a false alarm
 here, but it's not an unreasonable thing for antivirus software to flag.
 
 **To fix it:**
