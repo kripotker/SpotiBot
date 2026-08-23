@@ -1,0 +1,44 @@
+# === Secrets - never commit ===
+.env
+
+# === Python environment - reproducible from requirements.txt ===
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# === PyInstaller build artifacts ===
+build/
+dist/
+*.spec
+
+# === Large optional binaries for the bundled-exe build ===
+# (see README - download links provided there; ffmpeg.exe/ffprobe.exe are
+# at/over GitHub's 100MB per-file push limit on their own, and none of
+# these three are actually source code)
+ffmpeg.exe
+ffprobe.exe
+deno.exe
+
+# === Downloaded automatically at runtime, not part of source ===
+models/
+llama_cpp/
+cuda_runtime/
+
+# === User-specific local state, not shared source ===
+spotibot_settings.json
+
+# === Runtime debug artifacts ===
+debug_last_capture*.wav
+raw_discord_audio_*.wav
+ffmpeg_debug.log
+ffmpeg_cue_debug.log
+
+# === Editor/OS noise (harmless to include even if you don't use these) ===
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+
+# === The packaged zip, skipping it ===
+*.zip

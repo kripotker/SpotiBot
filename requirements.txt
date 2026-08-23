@@ -1,0 +1,12 @@
+# Discord voice with DAVE support - installed separately below, NOT here,
+# since it needs a special git+ URL (see setup command). Do not add
+# discord.py or discord-ext-voice-recv here - they conflict with py-cord.
+
+python-dotenv
+spotipy
+yt-dlp
+numpy
+faster-whisper
+openai
+requests
+PyNaCl

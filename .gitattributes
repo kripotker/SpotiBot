@@ -1,0 +1,34 @@
+# Normalize all text files to LF in the repository itself, regardless of
+# what line endings show up in any individual contributor's local working
+# copy (Windows CRLF vs Unix/Mac LF). Keeps the actual git history
+# consistent without depending on everyone's local core.autocrlf setting -
+# each person's own checkout still uses their OS's normal convention,
+# this just makes that explicit and consistent rather than implicit.
+* text=auto eol=lf
+
+# Explicit per-type declarations (redundant with the auto-detect rule
+# above for these, but explicit is safer than relying purely on Git's
+# guessing for anything that matters)
+*.py text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.json text eol=lf
+*.gitignore text eol=lf
+*.gitattributes text eol=lf
+LICENSE text eol=lf
+
+# Binary files - never let line-ending conversion touch these, it would
+# corrupt them. Most of these are already covered by .gitignore and won't
+# actually be tracked, but declaring them here is cheap insurance in case
+# that ever changes.
+*.mp3 binary
+*.wav binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
+*.exe binary
+*.dll binary
+*.zip binary
+*.7z binary
+*.gguf binary
