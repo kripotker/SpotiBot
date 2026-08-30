@@ -293,17 +293,32 @@ case - the GUI normally manages that for you.
 | `gpu_detect.py` | Best-effort local GPU detection, used only to *suggest* backends/models - never auto-applies anything |
 | `settings_store.py` | Shared JSON-backed settings (`spotibot_settings.json`), read/written by both `bot.py` and `gui_launcher.py` live |
 | `requirements.txt` | Python dependencies (py-cord installed separately - see Setup) |
+| `icon.ico` | App/window icon, multi-resolution (16px-256px) - used at both build time and runtime, see below |
+| `ping.mp3` | Default notification cue, played when the bot starts listening or hears a wake word (replaceable per-user from Settings) |
 
 ## Building your own `.exe`
 
 ```powershell
-pyinstaller --onedir --noupx --noconsole --name SpotiBot --add-data "ping.mp3;." --collect-all faster_whisper --collect-all ctranslate2 --collect-all discord --collect-all yt_dlp --collect-all nacl gui_launcher.py
+pyinstaller --onedir --noupx --noconsole --name SpotiBot --icon "icon.ico" --add-data "ping.mp3;." --add-data "icon.ico;." --collect-all faster_whisper --collect-all ctranslate2 --collect-all discord --collect-all yt_dlp --collect-all nacl gui_launcher.py
 ```
 
 `--onedir` (not `--onefile`) avoids a slow self-extraction step on every
 launch. `--noupx` and using a recent PyInstaller version both help reduce
 antivirus false positives - see the Troubleshooting section in Part 1 for
 why those happen at all.
+
+**About the icon:** `icon.ico` is already included in this repo, so the
+command above works as-is with no extra setup. `--icon "icon.ico"` sets
+the `.exe` file's own icon (Explorer, taskbar, shortcuts); `--add-data
+"icon.ico;."` is a *separate* requirement on top of that - it bundles the
+file into the app so `gui_launcher.py` can also set the window's
+title-bar icon at runtime (PyInstaller's `--icon` flag doesn't touch that
+at all, a common surprise). If you want to swap in your own icon instead,
+it needs to be a `.ico` file specifically, not a `.png` (Windows icons are
+their own multi-resolution format; a PNG can be converted with Pillow:
+`Image.open("logo.png").save("icon.ico", sizes=[(16,16),(32,32),(48,48),(256,256)])`).
+If `icon.ico` is ever missing, both the exe and the window quietly fall
+back to Tkinter's default icon - not an error, just undecorated.
 
 ### Optional: bundling ffmpeg and Deno into the exe too
 
