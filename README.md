@@ -25,11 +25,12 @@ What that means in practice:
   odd errors during the initial voice handshake, etc. Built-in
   self-healing covers most of these automatically; see Troubleshooting
   below for the rest.
-- **Releases only go up once cleared by Microsoft's malware analysis -
-  but individual antivirus setups can still occasionally disagree
-  afterward.** This isn't a sign anything's wrong - see the Download
-  section and the dedicated Windows Defender section below for why, and
-  for a from-source alternative if a release isn't up yet.
+- **This release has been reviewed and confirmed clean by Microsoft's
+  malware analysis team (WDSI), but you may still see a Windows
+  SmartScreen warning on download/first run.** That's a separate,
+  reputation-based system, not a sign anything's actually wrong - see the
+  Download section and the dedicated Windows Defender section below for
+  the full explanation.
 - If/when that PR gets merged into a stable release, this project should
   become meaningfully more reliable. Until then, expect "experimental" to
   mean what it says.
@@ -60,24 +61,21 @@ this part - those only matter in Part 2.
 
 ## Download
 
-**⚠️ The `.exe`/`.zip` won't be published here until it has passed
-Microsoft's malware analysis.** New, unsigned executables that download
-and run other programs at startup (this one does, by design - see the
-Windows Defender section below) start with zero reputation in
-Microsoft's cloud-based scanning system, and get flagged automatically
-until that clears - even when the file is genuinely safe. Rather than
-publish a release that immediately gets quarantined for everyone who
-downloads it, a release only goes up here once it's passed that check.
-If the Releases page is empty or the latest release looks incomplete,
-that's why.
+**This release has been reviewed by Microsoft's malware analysis team
+(WDSI) and confirmed clean - no malware or Defender signature issue
+found.** You may still see a **Windows SmartScreen** warning ("Windows
+protected your PC" / unrecognized app) the first time you download or run
+it, especially early on. That's expected and unrelated to the WDSI
+result: SmartScreen and Defender are two separate systems. SmartScreen's
+warning is based purely on download reputation (how new/uncommon a file
+is), not on any actual malware determination - Microsoft's own support
+team confirmed there's no way to manually clear that warning short of
+paid code-signing and the reputation that builds up over time from
+regular downloads. It'll fade as more people use this safely; it isn't a
+sign anything is wrong with this specific file, which has already been
+independently checked.
 
-**If you want to use SpotiBot right now, before a cleared release is
-available, and don't mind a bit of Python setup:** skip down to "Part 2:
-Building from source / development" further in this README - running
-from source works the same regardless of where that review currently
-stands.
-
-Once a release is published, grab the latest `SpotiBot-windows.zip` from
+Grab the latest `SpotiBot-windows.zip` from
 this repo's [Releases page](../../releases), extract it *anywhere you have write
 permission* (your Desktop or Documents folder are fine - avoid
 `Program Files`, since SpotiBot creates a few folders next to itself on
@@ -91,14 +89,16 @@ folder, not just the exe.
 
 ## If Windows Defender flags it - here's why it might do that, and what to do
 
-Even though this file isn't made available before passing Microsoft's
-malware detection process, individual antivirus setups can still
-disagree with that after the fact - you may still see Windows quarantine
-the exe the first time you run it, or block the download outright. Here's
-the honest reason why this can still happen, not just "ignore it":
-SpotiBot downloads and runs other programs at startup (the AI model
-backend, and possibly GPU support files) - which is also a pattern real
-malware uses. It's a false alarm
+This file has already been submitted to and cleared by Microsoft's
+malware analysis team (WDSI) - no malware or Defender signature issue
+found, confirmed directly by Microsoft support. Individual machines can
+still occasionally disagree with that in the moment (cloud protection
+data doesn't always sync instantly everywhere), so you may still see
+Windows quarantine the exe the first time you run it, or a SmartScreen
+warning on download. Here's the honest reason why this can still happen,
+not just "ignore it": SpotiBot downloads and runs other programs at
+startup (the AI model backend, and possibly GPU support files) - which is
+also a pattern real malware uses. It's a false alarm
 here, but it's not an unreasonable thing for antivirus software to flag.
 
 **To fix it:**
