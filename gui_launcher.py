@@ -1763,6 +1763,45 @@ class SettingsDialog(tk.Toplevel):
         th.label(whisper_row, textvariable=self.whisper_label_var, kind="body", bg=th.BG).pack(side="left")
         th.button(whisper_row, "Change...", self._change_whisper_model, kind="secondary").pack(side="right")
 
+        self._section_label(frame, "Notification sound")
+        th.label(
+            frame, "Played when the bot starts listening or hears a wake word.",
+            kind="secondary", bg=th.BG, justify="left",
+        ).pack(anchor="w", padx=12, pady=(0, 6))
+        ping_row = th.frame(frame)
+        ping_row.pack(fill="x", padx=12, pady=(0, 14))
+        current_ping = self.settings.get("ping_sound_path") or ""
+        current_ping_label = os.path.basename(current_ping) if current_ping else "ping.mp3 (default)"
+        self.ping_sound_var = tk.StringVar(value=f"Current: {current_ping_label}")
+        th.label(ping_row, textvariable=self.ping_sound_var, kind="body", bg=th.BG).pack(side="left")
+        th.button(ping_row, "Default", self._reset_ping_sound, kind="secondary").pack(side="right")
+        th.button(ping_row, "Browse...", self._change_ping_sound, kind="secondary").pack(side="right", padx=(0, 6))
+
+    def _change_ping_sound(self):
+        path = filedialog.askopenfilename(
+            title="Select a notification sound",
+            filetypes=[("Audio files", "*.mp3 *.wav *.ogg *.m4a"), ("All files", "*.*")],
+        )
+        if not path:
+            return
+        self._apply_ping_sound(path)
+
+    def _reset_ping_sound(self):
+        self._apply_ping_sound("")
+
+    def _apply_ping_sound(self, path: str):
+        s = settings_store.load_settings()
+        s["ping_sound_path"] = path
+        settings_store.save_settings(s)
+
+        display_name = os.path.basename(path) if path else "ping.mp3 (default)"
+        self.ping_sound_var.set(f"Current: {display_name}")
+
+        if bot_module:
+            bot_module.reload_settings()
+
+        messagebox.showinfo("SpotiBot", f"Notification sound updated to: {display_name}", parent=self)
+
     def _change_whisper_model(self):
         dialog = WhisperModelDialog(self, self.whisper_model_var.get(), self.whisper_device_var.get())
         self.wait_window(dialog)
@@ -2815,6 +2854,37 @@ class CudaRuntimeDownloadDialog(tk.Toplevel):
         )
 
 
+def _resource_path(filename: str) -> str:
+    """
+    Resolves a bundled resource file (an icon, etc.) to an absolute path
+    that works whether running from source or as a PyInstaller onefile/
+    onedir build - mirrors bot.py's identical helper (kept separate since
+    gui_launcher.py and bot.py run as different threads/contexts, not
+    worth sharing across a module boundary for one small function).
+    """
+    base_dir = getattr(sys, "_MEIPASS", None) or os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(base_dir, filename)
+
+
+def _apply_app_icon(root: tk.Tk):
+    """
+    Sets the window's title-bar icon. This is completely separate from
+    PyInstaller's --icon flag (which only sets the .exe file's icon in
+    Explorer/taskbar/shortcuts) - without this, the exe can look branded
+    everywhere except the one place you're staring at while it's open.
+    Setting it once on root is enough; Toplevel dialogs inherit it
+    automatically on Windows as long as root's icon was set first.
+    Cosmetic only - never worth crashing startup over a missing/bad icon
+    file, so any failure here is silently ignored.
+    """
+    icon_path = _resource_path("icon.ico")
+    if os.path.exists(icon_path):
+        try:
+            root.iconbitmap(icon_path)
+        except Exception:
+            pass
+
+
 def main():
     global LLAMA_SERVER_PATH
     _add_bundled_binaries_to_path()
@@ -2828,6 +2898,7 @@ def main():
     root.title("SpotiBot")
     root.configure(bg=th.BG)
     th.apply_dark_titlebar(root)
+    _apply_app_icon(root)
 
     if _needs_initial_setup():
         setup_dialog = InitialSetupDialog(root)
