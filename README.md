@@ -299,8 +299,7 @@ case - the GUI normally manages that for you.
 ## Building your own `.exe`
 
 ```powershell
-pyinstaller --onedir --noupx --noconsole --name SpotiBot --icon "icon.ico" --add-data "ping.mp3;." --add-data "icon.ico;." --collect-all faster_whisper --collect-all ctranslate2 --collect-all discord --collect-all yt_dlp --collect-all nacl gui_launcher.py
-```
+pyinstaller --onedir --noupx --noconsole --name SpotiBot --icon "icon.ico" --add-data "ping.mp3;." --add-data "icon.ico;." --collect-all faster_whisper --collect-all ctranslate2 --collect-all discord --collect-all yt_dlp --collect-all nacl --collect-all davey gui_launcher.py
 
 `--onedir` (not `--onefile`) avoids a slow self-extraction step on every
 launch. `--noupx` and using a recent PyInstaller version both help reduce

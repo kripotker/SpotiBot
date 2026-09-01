@@ -10,3 +10,4 @@ faster-whisper
 openai
 requests
 PyNaCl
+davey
